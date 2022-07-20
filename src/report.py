@@ -126,9 +126,3 @@ with open(report_html, "w", encoding="utf-8", errors="xmlcharrefreplace") as out
     output_file.write(html)
 with open(report_md, "w", encoding="utf-8", errors="xmlcharrefreplace") as output_file:
     output_file.write(md_text)
-
-#######
-import webbrowser
-webbrowser.open(r"C:\Users\fp42778\Documents\000_Télédétection\2022_CHT\projet\dsf_cht_2022\report\dsf_cht2022_report.html")
-
-

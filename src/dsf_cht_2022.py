@@ -8,7 +8,6 @@ Created on Wed Jun 15 11:53:27 2022
 import glob
 import os
 import sys
-import zipfile
 from tqdm import tqdm
 import pandas as pd
 import geopandas as gpd
@@ -20,7 +19,6 @@ survey_path = "../data/shp"
 csv_path = "../data/csv"
 # write_dir = f"{survey_path}/EXTRACT"
 out_path = "../result"
-write_dir_partage = r"L:\8520\01-Commun\05 - SUIVI_ECHANGE_DOC_SERVICES_UT\01-FORET\02_PROJETS-EN-COURS\2-TELEDETECTION_CHT\Campagne 2022\3_Relevés\__Temp__"
 rdf_path = r"C:\Donnees\fp42778\SIG\@ENDO\Referentiel\8520_rdf\rdf_ugs_8520.shp"
 placettes_2022_path = "../data/sig/placettes2022.zip"
 img_path = "../report/img"
@@ -32,9 +30,6 @@ def load_all_zipsurveys_as_geopandas(path):
     geoliste = list()
     for f in tqdm(files, ascii=' #', desc='loading files'):
         try:
-            # shutil.copy2(f, f"{write_dir_partage}/{os.path.basename(f)}")
-            # prod = os.path.basename(f)[:-4]
-            # survey_type = os.path.basename(f)[-7:-4]
             gdf = gpd.read_file(f)
             if gdf.crs != 'epsg:2154': #Lambert-93
                 gdf.to_crs('EPSG:2154', inplace=True)
@@ -295,16 +290,7 @@ g_etat_san_par_class.set_ylabels('nb. placettes')
 g_etat_san_par_class.savefig(f"{img_path}/g_etat_san_par_class.png",
                                            dpi=_dpi)
 
-# g_etat_san_par_massif = sns.catplot(x="etat_sanit", kind="count", hue='NMASSIF',
-#                                     data=dsf, dodge=True)
-# g_etat_san_par_massif.get_figure().savefig(f"{img_path}/g_etat_san_par_massif.png",
-#                                            dpi=_dpi)
 
-# g_etat_san_par_notateur = sns.countplot(data=dsf, x='etat_sanit', hue='NOTATEUR',
-#                                dodge=False)
-# g_etat_san_par_notateur.set(ylabel='nombre placettes')
-# g_etat_san_par_notateur.get_figure().savefig(f"{img_path}/g_etat_san_par_notateur.png",
-#                                              dpi=_dpi)
 g_g = sns.displot(dsf, x='G', stat='count', bins=list(range(0,60,5)),
                   hue='NMASSIF', multiple='stack')
 g_g.set_xlabels('surface terrière m²')
@@ -346,11 +332,6 @@ for lh in g_mb_mr._legend.legendHandles:
     lh.set_color('orange')
 g_mb_mr.savefig(f"{img_path}/g_mb_mr.png", dpi=_dpi)
 
-### surface terrière ###########################################################
-# g_G = sns.displot(dsf, x='G', stat='count', bins=20,
-#                    hue='NMASSIF', multiple="stack")
-
-
 
 # carte de répartition des placettes réalisées #################################
 import contextily as cx
@@ -366,6 +347,3 @@ ax.set_axis_off()
 cx.add_basemap(ax, zoom=11)
 ax.get_figure().savefig(f"{img_path}/g_localisation.png", bbox_inches='tight',
                         dpi=_dpi*2.0, orientation='landscape')
-
-
-
