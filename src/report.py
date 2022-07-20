@@ -58,7 +58,7 @@ md_text = f'''
 *{d.date}   fprigent-ONF*
 
 ### {len(d.dsf)} placettes retenues ({len(d.dsf[d.dsf.NMASSIF=="DSF"])} placettes epicollect)
-### {len(d.arbres)} arbres notés:
+### {len(d.arbres)} arbres notés
     
 ## Localisation des relevés
 <img src="./img/g_localisation.png" alt="Localisation">
@@ -129,6 +129,6 @@ with open(report_md, "w", encoding="utf-8", errors="xmlcharrefreplace") as outpu
 
 #######
 import webbrowser
-webbrowser.open(report_html)
+webbrowser.open(r"C:\Users\fp42778\Documents\000_Télédétection\2022_CHT\projet\dsf_cht_2022\report\dsf_cht2022_report.html")
 
 
