@@ -25,44 +25,6 @@ rdf_path = r"C:\Donnees\fp42778\SIG\@ENDO\Referentiel\8520_rdf\rdf_ugs_8520.shp"
 placettes_2022_path = "../data/sig/placettes2022.zip"
 img_path = "../report/img"
 
-################################################################################
-# def extractzip(filetoextract, write_dir):
-#    with zipfile.ZipFile(filetoextract,"r") as zip_ref:
-#       for file in tqdm(iterable=zip_ref.namelist(),
-#                        total=len(zip_ref.namelist()),
-#                        desc=f"extracting {os.path.basename(filetoextract)}",
-#                        unit="file"):
-#          zip_ref.extract(path=write_dir, member=file)
-
-
-################################################################################
-# def extract_all_zip_surveys(path, wdir):
-#     files = glob.glob(f"{path}/*shp.zip", recursive=False)
-#     compt = 0
-#     for f in tqdm(files, asci=' #', desc='loading files'):
-#         prod = os.path.basename(f)[:-4]
-#         survey_type = os.path.basename(f)[-7:-4]
-#         try:
-#            fic_unzip = glob.glob(f"{wdir}/*")
-#            if len(fic_unzip) == 0:
-#                extractzip(f, wdir)
-#                compt += 1
-#            else:
-#               print(f"{os.path.basename(f)} already extracted")
-#         except zipfile.BadZipFile:
-#            print(f"   >>>BadZipFile: removing {os.path.basename(f)}")
-#            os.remove(f)
-#         except:
-#             print("   >>>>>>>>>>>>> >>>>> >>>   !!! Unexpected error:", sys.exc_info()[0])
-#     print(f'\n{compt} files extracted')
-
-
-
-################################################################################
-# def survey_to_list(surveyfilename):
-#     df = pd.read_csv(surveyfilename)
-#     return df
-
 
 ################################################################################
 def load_all_zipsurveys_as_geopandas(path):
