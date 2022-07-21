@@ -222,7 +222,8 @@ dsf = dsf.join(ddl, on=['uuid','NUM_PLAC','NMASSIF'])
 repex = {';': ' - ',
          '"': '',
          "\n": "",
-         '\r\n': ''
+         '\r\n': '',
+         '\r': ''
          }
 dsf.replace(repex, regex=True, inplace=True)
 epigdf.replace(repex, regex=True, inplace=True)
