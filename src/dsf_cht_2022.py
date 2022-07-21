@@ -99,6 +99,16 @@ replace_nmassif = {
     "TAILLES D'HERBELAY": "HERBELAY",
     "VERSAILLES": "VERSAILL",
     }
+replace_notateur = {
+    "carre l": "carré",
+    "carre": "carré",
+    "carré - ": "carré",
+    "lionel carré": "carré",
+    "lionel": "carré",
+    "stan": "sw",
+    "sebastien": "sébastien"
+    }
+
 dsf.replace(replace_class, regex=True, inplace=True)
 
 # suppression coupes rases
@@ -108,6 +118,7 @@ dsf = dsf[dsf.Coupe2020 != "RASE"]
 dsf['NOTATEUR'] = dsf.NOTATEUR.str.lower()
 dsf['NMASSIF'] = dsf.NMASSIF.str.upper()
 dsf.replace(replace_nmassif, regex=True, inplace=True)
+dsf.replace(replace_notateur, regex=True, inplace=True)
 # récupération de la parcelle et ug la plus proche dans le référentiel RDF
 rdf = gpd.read_file(rdf_path)
 placettes_2022 = gpd.read_file(placettes_2022_path)
