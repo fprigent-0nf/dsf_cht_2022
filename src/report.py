@@ -34,7 +34,7 @@ head = '''
             #margin-left: 20px;
             text-align: center;
             }
-        
+
         table, th, td {
             border: none;
             border-bottom: 1px solid #C8C8C8;
@@ -61,7 +61,7 @@ md_text = f'''
 
 ### {len(d.dsf)} placettes retenues ({len(d.dsf[d.dsf.NMASSIF=="DSF"])} placettes epicollect)
 #### {len(d.arbres)} arbres notés
-    
+
 ## Localisation des relevés
 <img src="./img/g_localisation.png" alt="Localisation">
 

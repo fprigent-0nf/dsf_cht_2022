@@ -108,7 +108,7 @@ gdf.drop('14_Visibilit_des_hou', axis='columns', inplace=True)
 for c in gdf.columns:
     if 'arbre_' in c:
         gdf.drop(c, axis='columns', inplace=True)
-        
+
 gdf['filename'] = 'epicollect'
 
-  
+

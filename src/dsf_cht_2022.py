@@ -103,7 +103,7 @@ replace_notateur = {
     "carre": "carré",
     "carre l, douchin a.": "carré douchin",
     "carré lionel": "carré",
-    "carré,": "carré",    
+    "carré,": "carré",
     "carré, fiault, dufay": "carré fiault dufay",
     "lionel carré": "carré",
     "lionel elise": "carré fiault",
@@ -235,7 +235,7 @@ dsf = dsf.join(ddl, on=['uuid','NUM_PLAC','NMASSIF'])
 # file_name = f"{date}_dsf_cht_global_{len(dsf):03}placettes"
 repex = {';': ' - ',
          ',': ' - ',
-         '\n': '',         
+         '\n': '',
          '\r': '',
          '\r\n': ''
          }
