@@ -1,10 +1,10 @@
 
 # DSF_CHT 2022
 
-*2022-07-21_0902   fprigent-ONF*
+*2022-07-21_1215   fprigent-ONF*
 
 ### 184 placettes retenues (17 placettes epicollect)
-### 3680 arbres notés
+#### 3680 arbres notés
     
 ## Localisation des relevés
 <img src="./img/g_localisation.png" alt="Localisation">
@@ -239,33 +239,30 @@
 
 
 ## Nombre de placettes par notateurs
-| notateur             |   nb. placettes |
-|:---------------------|----------------:|
-| carre                |               4 |
-| carre l, douchin a.  |               6 |
-| carré,               |               3 |
-| carré, fiault, dufay |               1 |
-| cn                   |               4 |
-| dsf_75s10            |               3 |
-| dsf_77c03            |               5 |
-| dsf_78c03            |               9 |
-| fpmb                 |               5 |
-| fpnl                 |               3 |
-| girardot             |              13 |
-| jpdh                 |              41 |
-| lionel carré         |              11 |
-| lionel elise         |               3 |
-| pnfp                 |               4 |
-| sebastien            |              11 |
-| stan                 |               9 |
-| sw tb                |               6 |
-| sych                 |               3 |
-| sych vinet           |               1 |
-| sych-carre           |               6 |
-| sych-vinet           |               1 |
-| sébastien            |               9 |
-| vinet aodren         |               3 |
-| watkins              |              20 |
+| notateur              |   nb. placettes |
+|:----------------------|----------------:|
+| carré                 |              18 |
+| carré -  douchin a.   |               6 |
+| carré elise           |               3 |
+| carré fiault -  dufay |               1 |
+| cn                    |               4 |
+| dsf_75s10             |               3 |
+| dsf_77c03             |               5 |
+| dsf_78c03             |               9 |
+| fpmb                  |               5 |
+| fpnl                  |               3 |
+| girardot              |              13 |
+| jpdh                  |              41 |
+| pnfp                  |               4 |
+| sw                    |               9 |
+| sw tb                 |               6 |
+| sych                  |               3 |
+| sych vinet            |               1 |
+| sych-carré            |               6 |
+| sych-vinet            |               1 |
+| sébastien             |              20 |
+| vinet aodren          |               3 |
+| watkins               |              20 |
 
 
 ## Nombre de placettes par massifs

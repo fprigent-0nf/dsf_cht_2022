@@ -60,7 +60,7 @@ md_text = f'''
 *{date}   fprigent-ONF*
 
 ### {len(d.dsf)} placettes retenues ({len(d.dsf[d.dsf.NMASSIF=="DSF"])} placettes epicollect)
-### {len(d.arbres)} arbres notés
+#### {len(d.arbres)} arbres notés
     
 ## Localisation des relevés
 <img src="./img/g_localisation.png" alt="Localisation">

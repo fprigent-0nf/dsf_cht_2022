@@ -100,9 +100,9 @@ replace_nmassif = {
     "VERSAILLES": "VERSAILL",
     }
 replace_notateur = {
+    "carré,": "carré",
     "carre l": "carré",
-    "carre": "carré",
-    "carré - ": "carré",
+    "carre": "carré",    
     "lionel carré": "carré",
     "lionel": "carré",
     "stan": "sw",
