@@ -1,7 +1,7 @@
 
 # DSF_CHT 2022
 
-*2022-07-21_1245   fprigent-ONF*
+*2022-07-21_1516   fprigent-ONF*
 
 ### 185 placettes retenues (17 placettes epicollect)
 #### 3700 arbres notés
@@ -240,31 +240,29 @@
 
 
 ## Nombre de placettes par notateurs
-| notateur              |   nb. placettes |
-|:----------------------|----------------:|
-| carré                 |              18 |
-| carré -  douchin a.   |               6 |
-| carré carré           |               1 |
-| carré elise           |               3 |
-| carré fiault -  dufay |               1 |
-| cn                    |               4 |
-| dsf_75s10             |               3 |
-| dsf_77c03             |               5 |
-| dsf_78c03             |               9 |
-| fpmb                  |               5 |
-| fpnl                  |               3 |
-| girardot              |              13 |
-| jpdh                  |              41 |
-| pnfp                  |               4 |
-| sw                    |               9 |
-| sw tb                 |               6 |
-| sych                  |               3 |
-| sych vinet            |               1 |
-| sych-carré            |               6 |
-| sych-vinet            |               1 |
-| sébastien             |              20 |
-| vinet aodren          |               3 |
-| watkins               |              20 |
+| notateur           |   nb. placettes |
+|:-------------------|----------------:|
+| carré              |              19 |
+| carré douchin      |               6 |
+| carré fiault       |               3 |
+| carré fiault dufay |               1 |
+| cn                 |               4 |
+| dsf_75s10          |               3 |
+| dsf_77c03          |               5 |
+| dsf_78c03          |               9 |
+| fpmb               |               5 |
+| fpnl               |               3 |
+| girardot           |              13 |
+| jpdh               |              41 |
+| pnfp               |               4 |
+| sw                 |               9 |
+| sw tb              |               6 |
+| sych               |               3 |
+| sych carré         |               6 |
+| sych vinet         |               2 |
+| sébastien          |              20 |
+| vinet aodren       |               3 |
+| watkins            |              20 |
 
 
 ## Nombre de placettes par massifs
