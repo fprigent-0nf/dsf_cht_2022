@@ -213,13 +213,15 @@ ddl['etat_sanit'] = pd.to_numeric(pd.cut(ddl.prop_EF, bins=interv, labels=lab,
 
 dsf = dsf.join(ddl, on=['uuid','NUM_PLAC','NMASSIF'])
 
-### Sauvegarde data.frame FINAL ################################################
-from datetime import datetime
-date = datetime.today().strftime('%Y-%m-%d_%H%M')
+### Sauvegardes data.frame FINAL ################################################
+# from datetime import datetime
+# date = datetime.today().strftime('%Y-%m-%d_%H%M')
 
-file_name = f"{date}_dsf_cht_global_{len(dsf):03}placettes"
+# file_name = f"{date}_dsf_cht_global_{len(dsf):03}placettes"
+file_name = "dsf_cht_2022_final"
 dsf.to_csv(f"{out_path}/{file_name}.csv", sep=';', encoding="latin1") 
 dsf.to_file(f"{out_path}/{file_name}.shp.zip", driver='ESRI Shapefile')
+epigdf.to_csv(f"{out_path}/dsf_2022_epicollect.csv", sep=';', encoding="latin1")
 
 ### statistiques ###############################################################
 

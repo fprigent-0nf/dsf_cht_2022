@@ -7,8 +7,10 @@ Created on Sun Jun 19 21:14:22 2022
 
 import dsf_cht_2022 as d
 import markdown
+from datetime import datetime
 
 
+date = datetime.today().strftime('%Y-%m-%d_%H%M')
 table1 = d.ddl.reset_index().iloc[:,1:].to_markdown(index=False)
 
 
@@ -55,7 +57,7 @@ tail = """
 md_text = f'''
 # DSF_CHT 2022
 
-*{d.date}   fprigent-ONF*
+*{date}   fprigent-ONF*
 
 ### {len(d.dsf)} placettes retenues ({len(d.dsf[d.dsf.NMASSIF=="DSF"])} placettes epicollect)
 ### {len(d.arbres)} arbres notés
