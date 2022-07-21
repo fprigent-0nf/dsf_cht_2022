@@ -100,13 +100,17 @@ replace_nmassif = {
     "VERSAILLES": "VERSAILL",
     }
 replace_notateur = {
-    "carré,": "carré",
-    "carre l": "carré",
-    "carre": "carré",    
+    "carre": "carré",
+    "carre l, douchin a.": "carré douchin",
+    "carré lionel": "carré",
+    "carré,": "carré",    
+    "carré, fiault, dufay": "carré fiault dufay",
     "lionel carré": "carré",
-    "lionel": "carré",
+    "lionel elise": "carré fiault",
     "stan": "sw",
-    "sebastien": "sébastien"
+    "sebastien": "sébastien",
+    "sych-carre": "sych carré",
+    "sych-vinet": "sych vinet"
     }
 
 dsf.replace(replace_class, regex=True, inplace=True)
@@ -118,7 +122,7 @@ dsf = dsf[dsf.Coupe2020 != "RASE"]
 dsf['NOTATEUR'] = dsf.NOTATEUR.str.lower()
 dsf['NMASSIF'] = dsf.NMASSIF.str.upper()
 dsf.replace(replace_nmassif, regex=True, inplace=True)
-dsf.replace(replace_notateur, regex=True, inplace=True)
+dsf.replace(replace_notateur, regex=False, inplace=True)
 # récupération de la parcelle et ug la plus proche dans le référentiel RDF
 rdf = gpd.read_file(rdf_path)
 placettes_2022 = gpd.read_file(placettes_2022_path)
