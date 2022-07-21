@@ -219,12 +219,9 @@ dsf = dsf.join(ddl, on=['uuid','NUM_PLAC','NMASSIF'])
 # date = datetime.today().strftime('%Y-%m-%d_%H%M')
 
 # file_name = f"{date}_dsf_cht_global_{len(dsf):03}placettes"
-repex = {';': ' - ',
+repex = {
          ',': ' - ',
-         '"': '',
-         "\n": "",
-         '\r\n': '',
-         '\r': ''
+         
          }
 dsf.replace(repex, regex=True, inplace=True)
 epigdf.replace(repex, regex=True, inplace=True)
