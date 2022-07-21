@@ -2,7 +2,7 @@
 """
 Created on Wed Jun 15 11:53:27 2022
 
-@author: fprigent-ONF
+@author: fprigent-0nf
 """
 
 import glob

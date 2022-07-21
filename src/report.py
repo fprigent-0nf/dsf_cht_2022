@@ -2,7 +2,7 @@
 """
 Created on Sun Jun 19 21:14:22 2022
 
-@author: fprigent-ONF
+@author: fprigent-0nf
 """
 
 import dsf_cht_2022 as d
