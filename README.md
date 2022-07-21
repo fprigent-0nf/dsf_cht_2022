@@ -1,2 +1,2 @@
 # dsf_cht_2022
-*Castanea sativa* dieback remote sensing detection
+*Castanea sativa* dieback remote sensing
