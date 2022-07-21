@@ -363,7 +363,7 @@ g_mb_mr.savefig(f"{img_path}/g_mb_mr.png", dpi=_dpi)
 import contextily as cx
 dsf_wm = dsf.to_crs(epsg=3857)
 # rdf_wm = rdf.to_crs(epsg=3857)
-ax = dsf_wm.plot(figsize=(8, 14), alpha=0.9, color='red', markersize=2,
+ax = dsf_wm.plot(figsize=(8, 14), alpha=0.9, color='red', markersize=1.8,
                  edgecolor='red')
 # bx = rdf_wm.plot(figsize=(20, 40), alpha=0.5, edgecolor='k')
 # dsf_wm.apply(lambda x: ax.annotate(text=x['NUM_PLAC'], xy=x.geometry.coords[0],
