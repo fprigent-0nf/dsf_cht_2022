@@ -220,7 +220,9 @@ dsf = dsf.join(ddl, on=['uuid','NUM_PLAC','NMASSIF'])
 
 # file_name = f"{date}_dsf_cht_global_{len(dsf):03}placettes"
 repex = {';': ' - ',
-         '"': "'"
+         '"': '',
+         "\n": "",
+         '\r\n': ''
          }
 dsf.replace(repex, regex=True, inplace=True)
 epigdf.replace(repex, regex=True, inplace=True)
@@ -228,8 +230,8 @@ file_name = "dsf_cht_2022_final"
 dsf.to_csv(f"{out_path}/{file_name}.csv", sep=';', encoding="latin1",
            quoting=csv.QUOTE_NONNUMERIC)
 dsf.to_file(f"{out_path}/{file_name}.shp.zip", driver='ESRI Shapefile')
-epigdf.to_csv(f"{out_path}/dsf_2022_epicollect.csv", sep=';', encoding="latin1",
-              quoting=csv.QUOTE_NONNUMERIC)
+epigdf.to_csv(f"{out_path}/dsf_2022_epicollect.csv", index=False, sep=';',
+              encoding="latin1")
 
 ### statistiques ###############################################################
 
