@@ -34,7 +34,7 @@ def load_all_zipsurveys_as_geopandas(path):
             if gdf.crs != 'epsg:2154': #Lambert-93
                 gdf.to_crs('EPSG:2154', inplace=True)
             gdf['filename'] = os.path.basename(f)
-            geoliste.append(gdf)        
+            geoliste.append(gdf)
         except:
             print("Unexpected error:", sys.exc_info()[0])
     g = gpd.GeoDataFrame(pd.concat(geoliste, ignore_index=True), crs='EPSG:2154')
@@ -80,8 +80,8 @@ replace_class = {
        "4: 50-75%":  4,
        "5: 75-100%": 5
        }
-replace_nmassif = {    
-    "BOIS D'ARCY": "BOISARCY",    
+replace_nmassif = {
+    "BOIS D'ARCY": "BOISARCY",
     "CARNELLE": "CARN",
     "ECHARCON": "ECHA",
     "FAUSSE REPOSE": "F-REPOSE",
@@ -97,7 +97,7 @@ replace_nmassif = {
     "ST BENOIT": "SAINT-BE",
     "ST EUTROPE": "SAINTEUT",
     "TAILLES D'HERBELAY": "HERBELAY",
-    "VERSAILLES": "VERSAILL"    
+    "VERSAILLES": "VERSAILL",
     }
 dsf.replace(replace_class, regex=True, inplace=True)
 
@@ -138,7 +138,7 @@ VISI = dsf.columns[dsf.columns.str.contains('VISIH')]
 count_5_0 = 0
 for i in range(0, 20):
     for j in range(0, len(dsf)):
-        if dsf[MORTAL[i]].iat[j] == 5 and dsf[MRAMIF[i]].iat[j] == 0:            
+        if dsf[MORTAL[i]].iat[j] == 5 and dsf[MRAMIF[i]].iat[j] == 0:
             dsf[MRAMIF[i]].iat[j] = 5
             count_5_0 += 1
 #
@@ -168,7 +168,7 @@ arbres.visi.replace({'T':'non', 'F':'oui'}, inplace=True)
 ### Fonctions de calcul notation DEPERIS #######################################
 ### MB: Mortalité branche
 ### MR: Manque ramifications
-def get_note_deperis(mb, mr):    
+def get_note_deperis(mb, mr):
     matrice_deperis = [['A','B','C','D','E','F'],
                        ['B','B','C','D','E','F'],
                        ['C','C','D','D','E','F'],
@@ -189,7 +189,7 @@ arbres['note'] = arbres.apply(lambda x: get_note_deperis(x.MB, x.MR), axis=1)
 # C   Coupe rase
 ################################################################################
 
-def get_notes_by_placette(notes_string): 
+def get_notes_by_placette(notes_string):
     '''renvoie le nombre de valeurs dans chaque classe A,B,C,D,E,F
     '''
     result = map(lambda x: notes_string.count(x), list("ABCDEF"))
@@ -218,8 +218,10 @@ dsf = dsf.join(ddl, on=['uuid','NUM_PLAC','NMASSIF'])
 # date = datetime.today().strftime('%Y-%m-%d_%H%M')
 
 # file_name = f"{date}_dsf_cht_global_{len(dsf):03}placettes"
+dsf.replace({";":" - "}, regex=True, inplace=True)
+epigdf.replace({";":" - "}, regex=True, inplace=True)
 file_name = "dsf_cht_2022_final"
-dsf.to_csv(f"{out_path}/{file_name}.csv", sep=';', encoding="latin1") 
+dsf.to_csv(f"{out_path}/{file_name}.csv", sep=';', encoding="latin1")
 dsf.to_file(f"{out_path}/{file_name}.shp.zip", driver='ESRI Shapefile')
 epigdf.to_csv(f"{out_path}/dsf_2022_epicollect.csv", sep=';', encoding="latin1")
 
@@ -329,7 +331,7 @@ g_mb_mr = sns.relplot(x="MR", y="MB", size="value",
 # g_mb_mr.axes.ravel()[0].invert_yaxis()
 g_mb_mr.axes[0][0].invert_yaxis()
 g_mb_mr._legend.set_title('nb.arbres')
-for lh in g_mb_mr._legend.legendHandles: 
+for lh in g_mb_mr._legend.legendHandles:
     lh.set_alpha(.4)
     lh.set_color('orange')
 g_mb_mr.savefig(f"{img_path}/g_mb_mr.png", dpi=_dpi)
