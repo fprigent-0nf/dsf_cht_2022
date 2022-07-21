@@ -1,10 +1,10 @@
 
 # DSF_CHT 2022
 
-*2022-07-21_1215   fprigent-ONF*
+*2022-07-21_1225   fprigent-ONF*
 
-### 184 placettes retenues (17 placettes epicollect)
-#### 3680 arbres notés
+### 185 placettes retenues (17 placettes epicollect)
+#### 3700 arbres notés
     
 ## Localisation des relevés
 <img src="./img/g_localisation.png" alt="Localisation">
@@ -108,6 +108,7 @@
 |        103 | MARLY-VS      |   0 |   2 |   4 |  11 |   0 |   3 |      0.15 |       0.7  |            0 |
 |        105 | MARLY-VS      |   0 |   9 |   8 |   3 |   0 |   0 |      0    |       0.15 |            0 |
 |        106 | MARLY-VS      |   2 |   4 |  10 |   3 |   1 |   0 |      0.05 |       0.2  |            0 |
+|        111 | MARLY-VS      |   0 |   7 |   7 |   3 |   1 |   2 |      0.15 |       0.3  |            0 |
 |        113 | MARLY-VS      |   0 |   6 |   6 |   7 |   0 |   1 |      0.05 |       0.4  |            0 |
 |        115 | MARLY-VS      |   0 |  11 |   4 |   3 |   0 |   2 |      0.1  |       0.25 |            0 |
 |        116 | MARLY-VS      |   0 |   4 |   5 |   7 |   2 |   2 |      0.2  |       0.55 |            1 |
@@ -243,6 +244,7 @@
 |:----------------------|----------------:|
 | carré                 |              18 |
 | carré -  douchin a.   |               6 |
+| carré carré           |               1 |
 | carré elise           |               3 |
 | carré fiault -  dufay |               1 |
 | cn                    |               4 |
@@ -281,7 +283,7 @@
 | HERBELAY      |               5 |
 | ISAD          |               3 |
 | MALMAI92      |               7 |
-| MARLY-VS      |              20 |
+| MARLY-VS      |              21 |
 | MEUDON        |              13 |
 | MISSIONNAIRES |               1 |
 | MOMO          |              41 |
