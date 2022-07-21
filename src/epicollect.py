@@ -89,26 +89,26 @@ gdf.rename(columns = {'ec5_uuid':'uuid',
                      'REMARQUES': 'REMARQUE'
                      }, inplace = True)
 gdf.columns = gdf.columns.str.replace('MB_','MORTAL').str.replace('MR_','MRAMIF')
-gdf.drop('created_at', axis='columns', inplace=True)
-gdf.drop('uploaded_at', axis='columns', inplace=True)
-gdf.drop('2_Coupes_effectues_d', axis='columns', inplace=True)
-gdf.drop('title', axis='columns', inplace=True)
-gdf.drop('type_obs_1', axis='columns', inplace=True)
-gdf.drop('obs_1', axis='columns', inplace=True)
-gdf.drop('obs_onf_1', axis='columns', inplace=True)
-gdf.drop('lat_coord_gps', axis='columns', inplace=True)
-gdf.drop('long_coord_gps', axis='columns', inplace=True)
-gdf.drop('accuracy_coord_gps', axis='columns', inplace=True)
-gdf.drop('UTM_Northing_coord_gps', axis='columns', inplace=True)
-gdf.drop('UTM_Easting_coord_gps', axis='columns', inplace=True)
-gdf.drop('UTM_Zone_coord_gps', axis='columns', inplace=True)
-gdf.drop('PEUP_RUIN', axis='columns', inplace=True)
-gdf.drop('14_Visibilit_des_hou', axis='columns', inplace=True)
+
+cols = ['created_at',
+        'uploaded_at',
+        '2_Coupes_effectues_d',
+        'title',
+        'type_obs_1',
+        'obs_1',
+        'obs_onf_1',
+        'lat_coord_gps',
+        'long_coord_gps',
+        'accuracy_coord_gps',
+        'UTM_Northing_coord_gps',
+        'UTM_Easting_coord_gps',
+        'UTM_Zone_coord_gps',
+        'PEUP_RUIN',
+        '14_Visibilit_des_hou']
+gdf.drop(cols, axis='columns', inplace=True)
 
 for c in gdf.columns:
     if 'arbre_' in c:
         gdf.drop(c, axis='columns', inplace=True)
 
 gdf['filename'] = 'epicollect'
-
-
