@@ -3,6 +3,7 @@
 Created on Wed Jun 15 11:53:27 2022
 
 @author: fprigent-0nf
+
 ><(((°>
 """
 
@@ -15,6 +16,7 @@ import geopandas as gpd
 from shapely import wkt
 
 import epicollect as epi
+import TB as tb
 
 survey_path = "../data/shp"
 csv_path = "../data/csv"
@@ -48,13 +50,14 @@ def load_all_zipsurveys_as_geopandas(path):
 
 dsf0 = load_all_zipsurveys_as_geopandas(survey_path)
 epigdf = epi.gdf
+tbgdf = tb.gdf
 #load csv
 dcsv = pd.read_csv(csv_path + '/dsf_cht_2022_p173_ronqueux_releve.csv',
               delimiter=';')
 dcsv['geometry'] = dcsv.geometry.apply(wkt.loads)
 ddcsv=gpd.GeoDataFrame(dcsv, geometry='geometry', crs=2154)
 
-dsf = pd.concat([dsf0, epi.gdf, dcsv], axis=0, ignore_index=True)
+dsf = pd.concat([dsf0, epi.gdf, dcsv, tb.gdf], axis=0, ignore_index=True)
 
 l1 = len(dsf)
 dsf.drop_duplicates(subset=dsf.columns[dsf.columns!='filename'],
@@ -169,7 +172,8 @@ dsf.loc[dsf.uuid=='0x47b3f749f1766e17', 'NUM_PLAC'] = 194
 dsf.loc[dsf.NUM_PLAC==133, 'NMASSIF'] = "BOISARCY"
 
 ### tidy dataframe sur l'ensemble des arbres ttes placettes confondues #########
-a = pd.melt(dsf,id_vars=['uuid','NUM_PLAC','NMASSIF'],value_vars=MORTAL.append(MRAMIF).append(VISI))
+a = pd.melt(dsf, id_vars=['uuid','NUM_PLAC','NMASSIF'],
+            value_vars=MORTAL.append(MRAMIF).append(VISI))
 a['num_arbre'] = a.variable.str.slice(-2)
 a.variable = a.variable.str.slice(stop=-2)
 
