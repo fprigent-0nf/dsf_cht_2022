@@ -13,8 +13,8 @@ import pandas as pd
 import geopandas as gpd
 import os
 
-# path_csv1 = '../data/csv/releves_chataignier_IdF_DSF_2022_TB3.csv'
-path_csv2 = '../data/csv/releves_chataignier_IdF_DSF_2022_VLM_RT_TB.csv'
+path_csv1 = '../data/csv/releves_chataignier_IdF_DSF_2022_TB3.csv'
+# path_csv2 = '../data/csv/releves_chataignier_IdF_DSF_2022_VLM_RT_TB.csv'
 
 ''' géorelevé: dsf_cht_2022
 
@@ -48,22 +48,21 @@ path_csv2 = '../data/csv/releves_chataignier_IdF_DSF_2022_VLM_RT_TB.csv'
        '''
 
 
-# csv1 = pd.read_csv(path_csv1, delimiter=';', header=2, encoding="ISO-8859-1")
-csv2 = pd.read_csv(path_csv2, delimiter=';', header=2, encoding="ISO-8859-1")
+csv1 = pd.read_csv(path_csv1, delimiter=';', header=2, encoding="ISO-8859-1")
+# csv2 = pd.read_csv(path_csv2, delimiter=';', header=2, encoding="ISO-8859-1")
 
-# csv1['filename'] = os.path.basename(path_csv1)
-csv2['filename'] = os.path.basename(path_csv2)
+csv1['filename'] = os.path.basename(path_csv1)
+# csv2['filename'] = os.path.basename(path_csv2)
 # dcsv['geometry'] = dcsv.geometry.apply(wkt.loads)
 # ddcsv=gpd.GeoDataFrame(dcsv, geometry='geometry', crs=2154)
 
 # csv = pd.concat([csv1, csv2])
-csv = csv2.copy()
+csv = csv1.copy()
 
 csv['lib_codeinsee'].fillna('dsf', inplace=True)
-# df.loc[df.grades>50,'result']='success'
-csv.loc[csv.code_placette.str.len()<4, 'placette'] = csv.code_placette
+# csv.loc[csv.code_placette.dtype != 'int64', 'placette'] = csv.code_placette
 
-cols = ['placette', 'x93', 'y93', 'lib_codeinsee', 'observation', 'date_obs',
+cols = ['code_placette', 'x93', 'y93', 'lib_codeinsee', 'observation', 'date_obs',
         'codeco1', 'G___PLAC', 'DMAXA___PLAC', 'REMARQUES___PLAC',
         'RECOUV_SUP___PLAC', 'RECOUV_INF___PLAC', 'lib_PEUP_RUIN___PLAC',
         'filename']
@@ -91,7 +90,7 @@ d2.loc[len(d2)] = row
 gdf = gpd.GeoDataFrame(d2, geometry=gpd.points_from_xy(d2.x93,
                                                        d2.y93,
                                                        crs='epsg:2154'))
-gdf.rename(columns = {'placette': 'NUM_PLAC',
+gdf.rename(columns = {'code_placette': 'NUM_PLAC',
                       'lib_codeinsee': 'NMASSIF',
                       'observation':'uuid',
                       'date_obs':'DATE',
