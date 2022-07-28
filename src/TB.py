@@ -97,14 +97,14 @@ gdf.rename(columns = {'placette': 'NUM_PLAC',
                       'date_obs':'DATE',
                       'codeco1': 'NOTATEUR',
                       'G___PLAC': 'G',
-                      'DMAXA___PLAC': 'R_MAX',
+                      'DMAXA___PLAC': 'DIST_MAX',
                       'REMARQUES___PLAC': 'REMARQUE',
                       'RECOUV_SUP___PLAC': 'REC_SUP2',
                       'RECOUV_INF___PLAC': 'REC_LIGN',
                       'lib_PEUP_RUIN___PLAC': 'ETAT_SAN'
                      }, inplace = True)
 gdf.drop(['x93', 'y93'], axis='columns', inplace=True)
-gdf['DIST_MAX'] = gdf.R_MAX
+gdf['R_MAX'] = 20
 gdf['NOTATEUR'] = 'dsf_' + gdf['NOTATEUR']
 
 
