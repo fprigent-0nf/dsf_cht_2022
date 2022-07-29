@@ -8,16 +8,16 @@ Created on Tue Jul 27 20:57:53 2022
 """
 
 ################################################################################
-
 import pandas as pd
 import geopandas as gpd
 import os
 
-path_csv1 = '../data/csv/releves_chataignier_IdF_DSF_2022_TB3.csv'
-# path_csv2 = '../data/csv/releves_chataignier_IdF_DSF_2022_VLM_RT_TB.csv'
+
+CSV_PATH = '../data/csv/releves_chataignier_IdF_DSF_2022_TB3.csv'
 
 
-def parse_csv(path=path_csv1):
+################################################################################
+def parse_csv(path=CSV_PATH):
     ''' géorelevé: dsf_cht_2022
     
            'uuid', 'ObjetId', 'Descriptif', 'DATE', 'NOTATEUR', 'NMASSIF',
@@ -50,48 +50,50 @@ def parse_csv(path=path_csv1):
            '''
     
     
-    csv1 = pd.read_csv(path_csv1, delimiter=';', header=2, encoding="ISO-8859-1")
-    # csv2 = pd.read_csv(path_csv2, delimiter=';', header=2, encoding="ISO-8859-1")
-    
-    csv1['filename'] = os.path.basename(path_csv1)
-    # csv2['filename'] = os.path.basename(path_csv2)
-    # dcsv['geometry'] = dcsv.geometry.apply(wkt.loads)
-    # ddcsv=gpd.GeoDataFrame(dcsv, geometry='geometry', crs=2154)
-    
-    # csv = pd.concat([csv1, csv2])
-    csv = csv1.copy()
-    
+    csv = pd.read_csv(CSV_PATH, delimiter=';', header=2, encoding='ISO-8859-1')
+    csv['filename'] = os.path.basename(CSV_PATH)    
     csv['lib_codeinsee'].fillna('dsf', inplace=True)
     # csv.loc[csv.code_placette.dtype != 'int64', 'placette'] = csv.code_placette
     # csv.loc[lambda df: df['placette'].dtype == 'int64', 'placette']
     
-    cols = ['code_placette', 'x93', 'y93', 'lib_codeinsee', 'observation', 'date_obs',
-            'codeco1', 'G___PLAC', 'DMAXA___PLAC', 'REMARQUES___PLAC',
-            'RECOUV_SUP___PLAC', 'RECOUV_INF___PLAC', 'lib_PEUP_RUIN___PLAC',
+    cols = ['code_placette',
+            'x93',
+            'y93',
+            'lib_codeinsee',
+            'observation',
+            'date_obs',
+            'codeco1',
+            'G___PLAC',
+            'DMAXA___PLAC',
+            'REMARQUES___PLAC',
+            'RECOUV_SUP___PLAC',
+            'RECOUV_INF___PLAC',
+            'lib_PEUP_RUIN___PLAC',
             'filename']
     
-    d2=pd.pivot_table(csv, index=cols, values=['MORBRA2___ARBRE','PERRAM2___ARBRE'],
-               columns=['arbre'])
+    df = pd.pivot_table(csv, index=cols,
+                        values=['MORBRA2___ARBRE','PERRAM2___ARBRE'],
+                        columns=['arbre'])
     
-    d2.columns = [f"{x[0]}{int(x[1]):0>2}"
+    df.columns = [f'{x[0]}{int(x[1]):0>2}'
                   .replace('MORBRA2___ARBRE','MORTAL')
                   .replace('PERRAM2___ARBRE','MRAMIF')
-                  for x in d2.columns]
-    d2.reset_index(inplace=True)
+                  for x in df.columns]
+    df.reset_index(inplace=True)
     
-    row = [177, 652120, 6837020, 'SAINTE-GENEVIEVE-DES-BOIS',
-     67874, '29/06/2022', '78S01', 33, 10,
-     "Peuplement ruiné. Coupe sanitaire et nombreux arbres E et F mais sur une zone restreinte centrée sur les coordonnées enregistrées. Le centre de la placette est 14 mètres plus au sud qu'en 2020. Peuplement très dépérissant autour.",
-     3, 3, 'OUI', 'releves_chataignier_IdF_DSF_2022_TB3.csv',
-     5,5,5,5,5,5,5,5,5,5,
-     5,5,5,5,5,5,5,5,5,5,
-     5,5,5,5,5,5,5,5,5,5,
-     5,5,5,5,5,5,5,5,5,5]
+    row = [177, 652120, 6837020, 'SAINTE-GENEVIEVE-DES-BOIS', 67874, '29/06/2022',
+           '78S01', 33, 10,
+           "Peuplement ruiné. Coupe sanitaire et nombreux arbres E et F mais sur une zone restreinte centrée sur les coordonnées enregistrées. Le centre de la placette est 14 mètres plus au sud qu'en 2020. Peuplement très dépérissant autour.",
+           3, 3, 'OUI', 'releves_chataignier_IdF_DSF_2022_TB3.csv',
+           5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+           5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+           5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+           5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
     # df.loc[len(df)] = list
-    d2.loc[len(d2)] = row
+    df.loc[len(df)] = row
     
-    gdf = gpd.GeoDataFrame(d2, geometry=gpd.points_from_xy(d2.x93,
-                                                           d2.y93,
+    gdf = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.x93,
+                                                           df.y93,
                                                            crs='epsg:2154'))
     gdf.rename(columns = {'code_placette': 'NUM_PLAC',
                           'lib_codeinsee': 'NMASSIF',
@@ -108,8 +110,10 @@ def parse_csv(path=path_csv1):
     gdf.drop(['x93', 'y93'], axis='columns', inplace=True)
     gdf['R_MAX'] = 20
     gdf['NOTATEUR'] = 'dsf_' + gdf['NOTATEUR']
+    
     return gdf
 
-if __name__ == "__main__":
-    parse_csv(path_csv1)
 
+################################################################################
+if __name__ == '__main__':
+    parse_csv(CSV_PATH)

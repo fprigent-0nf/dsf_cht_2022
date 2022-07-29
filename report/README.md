@@ -1,7 +1,7 @@
 
 # DSF_CHT 2022
 
-*2022-07-29_1204   fprigent-ONF*
+*2022-07-29_1654   fprigent-0NF*
 
 ### 188 placettes retenues (17 placettes epicollect)
 #### 3760 arbres notés
@@ -297,7 +297,3 @@
 | SAINTE-GENEVIEVE-DES-BOIS |               2 |
 | SAINTEUT                  |               5 |
 | VERSAILL                  |               6 |
-
-
-
-

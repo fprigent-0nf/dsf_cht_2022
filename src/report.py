@@ -16,7 +16,7 @@ date = datetime.today().strftime('%Y-%m-%d_%H%M')
 table1 = d.ddl.reset_index().iloc[:,1:].to_markdown(index=False)
 
 
-head = '''
+HEAD = '''
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -51,7 +51,7 @@ head = '''
 
 <body>
 '''
-tail = """
+TAIL = """
 </body>
 </html>
 """
@@ -59,7 +59,7 @@ tail = """
 md_text = f'''
 # DSF_CHT 2022
 
-*{date}   fprigent-ONF*
+*{date}   fprigent-0NF*
 
 ### {len(d.dsf)} placettes retenues ({len(d.dsf[d.dsf.NMASSIF=="DSF"])} placettes epicollect)
 #### {len(d.arbres)} arbres notés
@@ -117,16 +117,16 @@ md_text = f'''
 
 ## Nombre de placettes par massifs
 {d.nb_plac_par_massif.to_markdown(index=False)}
-
-
-
-
 '''
-html = head + markdown.markdown(md_text, extensions=['tables']) + tail
-#
+
+################################################################################
+html = HEAD + markdown.markdown(md_text, extensions=['tables']) + TAIL
+
 report_html = "../report/dsf_cht2022_report.html"
 report_md = "../report/README.md"
-with open(report_html, "w", encoding="utf-8", errors="xmlcharrefreplace") as output_file:
+with open(report_html, "w", encoding="utf-8",
+          errors="xmlcharrefreplace") as output_file:
     output_file.write(html)
-with open(report_md, "w", encoding="utf-8", errors="xmlcharrefreplace") as output_file:
+with open(report_md, "w", encoding="utf-8",
+          errors="xmlcharrefreplace") as output_file:
     output_file.write(md_text)

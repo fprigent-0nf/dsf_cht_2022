@@ -18,13 +18,13 @@ from shapely import wkt
 import epicollect
 import TB
 
-survey_path = "../data/shp"
-csv_path = "../data/csv"
-# write_dir = f"{survey_path}/EXTRACT"
-out_path = "../result"
-rdf_path = r"C:\Donnees\fp42778\SIG\@ENDO\Referentiel\8520_rdf\rdf_ugs_8520.shp"
-placettes_2022_path = "../data/sig/placettes2022.zip"
-img_path = "../report/img"
+
+SURVEY_PATH = "../data/shp"
+CSV_PATH = "../data/csv"
+OUT_PATH = "../result"
+RDF_PATH = "C:/Donnees/fp42778/SIG/@ENDO/Referentiel/8520_rdf/rdf_ugs_8520.shp"
+PLACETTES_2022_PATH = "../data/sig/placettes2022.zip"
+IMG_PATH = "../report/img"
 
 
 ################################################################################
@@ -48,21 +48,21 @@ def load_all_zipsurveys_as_geopandas(path):
 ################################################################################
 ################################################################################
 
-dsf0 = load_all_zipsurveys_as_geopandas(survey_path)
+df = load_all_zipsurveys_as_geopandas(SURVEY_PATH)
 epigdf = epicollect.get_epicollect()
 tbgdf = TB.parse_csv()
 #load csv
-dcsv = pd.read_csv(csv_path + '/dsf_cht_2022_p173_ronqueux_releve.csv',
+dcsv = pd.read_csv(CSV_PATH + '/dsf_cht_2022_p173_ronqueux_releve.csv',
               delimiter=';')
 dcsv['geometry'] = dcsv.geometry.apply(wkt.loads)
 ddcsv=gpd.GeoDataFrame(dcsv, geometry='geometry', crs=2154)
 
-dsf = pd.concat([dsf0, epigdf, dcsv, tbgdf], axis=0, ignore_index=True)
+dsf = pd.concat([df, epigdf, dcsv, tbgdf], axis=0, ignore_index=True)
 
 l1 = len(dsf)
 dsf.drop_duplicates(subset=dsf.columns[dsf.columns!='filename'],
                     keep='last', inplace=True)
-print (f"    {l1-len(dsf)} placettes dupliquées")
+print (f">>> {l1-len(dsf)} placettes dupliquées")
 
 # epi = get_epicollect.gdf
 # e2 = pd.concat([dsf.filter(regex='MORTAL|MRAMIF'), epi.filter(regex='MORTAL|MRAMIF')],
@@ -128,8 +128,8 @@ dsf['NMASSIF'] = dsf.NMASSIF.str.upper()
 dsf.replace(replace_nmassif, regex=True, inplace=True)
 dsf.replace(replace_notateur, regex=False, inplace=True)
 # récupération de la parcelle et ug la plus proche dans le référentiel RDF
-rdf = gpd.read_file(rdf_path)
-placettes_2022 = gpd.read_file(placettes_2022_path)
+rdf = gpd.read_file(RDF_PATH)
+placettes_2022 = gpd.read_file(PLACETTES_2022_PATH)
 
 dsf = dsf.sjoin_nearest(rdf[['CCOD_FRT','CCOD_UG','CCOD_PRF','geometry']],
                         how='left', max_distance=25)
@@ -144,26 +144,18 @@ dsf['NMASSIF'].fillna('DSF', inplace=True)
 dsf['CCOD_FRT'].fillna('DSF', inplace=True)
 dsf['NUM_PLAC'].fillna('000', inplace=True)
 
-# index sur colonnes, ex: dsf[index]
-# MORTAL <- grep("MORTAL",colnames(dsf))
 MORTAL = dsf.columns[dsf.columns.str.contains('MORTAL')]
-# MRAMIF <- grep("MRAMIF",colnames(dsf))
 MRAMIF = dsf.columns[dsf.columns.str.contains('MRAMIF')]
-# VISI   <- grep("VISIH",colnames(dsf))
 VISI = dsf.columns[dsf.columns.str.contains('VISIH')]
 
 # remplacement des notations aberrentes 5_0 par 5_5
-# TODO: à améliorer
+# TODO: à optimiser
 count_5_0 = 0
 for i in range(0, 20):
     for j in range(0, len(dsf)):
         if dsf[MORTAL[i]].iat[j] == 5 and dsf[MRAMIF[i]].iat[j] == 0:
             dsf[MRAMIF[i]].iat[j] = 5
             count_5_0 += 1
-#
-mortal = dsf[MORTAL]
-ramif = dsf[MRAMIF]
-visih = dsf[VISI]
 
 #rectification num placettes éronnées
 # ECHARCON erreur num_plac 193 -> 194
@@ -172,13 +164,15 @@ dsf.loc[dsf.uuid=='0x47b3f749f1766e17', 'NUM_PLAC'] = 194
 dsf.loc[dsf.NUM_PLAC==133, 'NMASSIF'] = "BOISARCY"
 
 ### tidy dataframe sur l'ensemble des arbres ttes placettes confondues #########
-a = pd.melt(dsf, id_vars=['uuid','NUM_PLAC','NMASSIF'],
+arbres = pd.melt(dsf, id_vars=['uuid','NUM_PLAC','NMASSIF'],
             value_vars=MORTAL.append(MRAMIF).append(VISI))
-a['num_arbre'] = a.variable.str.slice(-2)
-a.variable = a.variable.str.slice(stop=-2)
+arbres['num_arbre'] = arbres.variable.str.slice(-2)
+arbres.variable = arbres.variable.str.slice(stop=-2)
 
-arbres = a.pivot(index=['uuid','NUM_PLAC','NMASSIF','num_arbre'], columns='variable', values='value').reset_index()
-arbres = arbres.rename(columns={"MORTAL": "MB", "MRAMIF": "MR", "VISIH_": "visi"}, errors="raise")
+arbres = arbres.pivot(index=['uuid','NUM_PLAC','NMASSIF','num_arbre'],
+                      columns='variable', values='value').reset_index()
+arbres = arbres.rename(columns={"MORTAL": "MB", "MRAMIF": "MR", "VISIH_": "visi"},
+                       errors="raise")
 
 # casting
 arbres[['MB','MR','num_arbre']] = arbres[['MB','MR','num_arbre']].astype('Int64')
@@ -186,19 +180,18 @@ arbres[['MB','MR','num_arbre']] = arbres[['MB','MR','num_arbre']].astype('Int64'
 arbres.visi.replace({'T':'non', 'F':'oui'}, inplace=True)
 
 ### Fonctions de calcul notation DEPERIS #######################################
-### MB: Mortalité branche
+### MB: Mortalité branches
 ### MR: Manque ramifications
 def get_note_deperis(mb, mr):
-    matrice_deperis = [['A','B','C','D','E','F'],
+    MATRICE_DEPERIS = [['A','B','C','D','E','F'],
                        ['B','B','C','D','E','F'],
                        ['C','C','D','D','E','F'],
                        ['D','D','D','E','F','F'],
                        ['E','E','E','F','F','F'],
                        ['F','F','F','F','F','F']]
-    return matrice_deperis[mb][mr]
+    return MATRICE_DEPERIS[mb][mr]
 
 arbres['note'] = arbres.apply(lambda x: get_note_deperis(x.MB, x.MR), axis=1)
-
 
 # Codification état sanotaire DSF ##############################################
 # Code   Libellé                          Définition
@@ -214,6 +207,8 @@ def get_notes_by_placette(notes_string):
     '''
     result = map(lambda x: notes_string.count(x), list("ABCDEF"))
     return pd.Series(result, index=list("ABCDEF"))
+
+
 def get_codif_etat_sanitaire_placette(prop_deperissant):
     return
 # répartition des arbres par placette dans chaque classe de note deperiss
@@ -247,20 +242,19 @@ repex = {';': ' - ',
 dsf.replace(repex, regex=True, inplace=True)
 epigdf.replace(repex, regex=True, inplace=True)
 file_name = "dsf_cht_2022_final"
-dsf.to_csv(f"{out_path}/{file_name}.csv", index=False, sep=',', encoding="latin1")
-dsf.to_file(f"{out_path}/{file_name}.shp.zip", driver='ESRI Shapefile')
-epigdf.to_csv(f"{out_path}/dsf_2022_epicollect.csv", index=False, sep=',',
+dsf.to_csv(f"{OUT_PATH}/{file_name}.csv", index=False, sep=',', encoding="latin1")
+dsf.to_file(f"{OUT_PATH}/{file_name}.shp.zip", driver='ESRI Shapefile')
+epigdf.to_csv(f"{OUT_PATH}/dsf_2022_epicollect.csv", index=False, sep=',',
               encoding="latin1")
 
-### statistiques ###############################################################
 
+### statistiques ###############################################################
 nb_plac_par_massif = dsf[['uuid','NMASSIF']].groupby('NMASSIF').count().reset_index()
 nb_plac_par_massif.columns = ['massif','nb. placettes']
 nb_plac_par_notateur = dsf[['uuid','NOTATEUR']].groupby('NOTATEUR').count().reset_index()
 nb_plac_par_notateur.columns = ['notateur','nb. placettes']
 nb_arbres_par_classes = ddl[list('ABCDEF')].sum()
 nb_arbres_par_classes.columns = ['classe','nb.arbres']
-
 
 
 ################################################################################
@@ -285,14 +279,14 @@ g_20_EF = sns.displot(ddl, x='prop_EF', stat='count', bins=bin_20,
 g_20_EF.set(xticks=bin_20)
 g_20_EF.set_xlabels('proportion E,F')
 g_20_EF.set_ylabels('nb. placettes')
-g_20_EF.savefig(f"{img_path}/g_20_EF.png", dpi=_dpi)
+g_20_EF.savefig(f"{IMG_PATH}/g_20_EF.png", dpi=_dpi)
 #
 g_20_DEF = sns.displot(ddl, x='prop_DEF', stat='count', bins=bin_20,
                    hue='NMASSIF', multiple="stack")
 g_20_DEF.set(xticks=bin_20)
 g_20_DEF.set_xlabels('proportion D,E,F')
 g_20_DEF.set_ylabels('nb. placettes')
-g_20_DEF.savefig(f"{img_path}/g_20_DEF.png", dpi=_dpi)
+g_20_DEF.savefig(f"{IMG_PATH}/g_20_DEF.png", dpi=_dpi)
 ### classes d'amplitude 25% ####################################################
 g2_25_EF = sns.displot(ddl2, x='value', stat='count', bins=bin_25, hue='NMASSIF',
                        multiple="stack", col='variable')
@@ -304,21 +298,21 @@ g_25_EF = sns.displot(ddl, x='prop_EF', stat='count', bins=bin_25,
 g_25_EF.set(xticks=bin_25)
 g_25_EF.set_xlabels('proportion E,F')
 g_25_EF.set_ylabels('nb. placettes')
-g_25_EF.savefig(f"{img_path}/g_25_EF.png", dpi=_dpi)
+g_25_EF.savefig(f"{IMG_PATH}/g_25_EF.png", dpi=_dpi)
 #
 g_25_DEF = sns.displot(ddl, x='prop_DEF', stat='count', bins=bin_25,
                    hue='NMASSIF', multiple="stack")
 g_25_DEF.set(xticks=bin_25)
 g_25_DEF.set_xlabels('proportion D,E,F')
 g_25_DEF.set_ylabels('nb. placettes')
-g_25_DEF.savefig(f"{img_path}/g_25_DEF.png", dpi=_dpi)
+g_25_DEF.savefig(f"{IMG_PATH}/g_25_DEF.png", dpi=_dpi)
 
 ### nb. placettes par classe etat sanitaire ####################################
 # sns.catplot(x="etat_sanit", kind="count", hue='NMASSIF', data=dsf, dodge=True)
 g_etat_san_par_class = sns.catplot(x="etat_sanit", kind="count", data=dsf)
 g_etat_san_par_class.set_xlabels('classe état sanitaire')
 g_etat_san_par_class.set_ylabels('nb. placettes')
-g_etat_san_par_class.savefig(f"{img_path}/g_etat_san_par_class.png",
+g_etat_san_par_class.savefig(f"{IMG_PATH}/g_etat_san_par_class.png",
                                            dpi=_dpi)
 
 
@@ -326,19 +320,19 @@ g_g = sns.displot(dsf, x='G', stat='count', bins=list(range(0,60,5)),
                   hue='NMASSIF', multiple='stack')
 g_g.set_xlabels('surface terrière m²')
 g_g.set_ylabels('nb. placettes')
-g_g.savefig(f"{img_path}/g_g.png", dpi=_dpi)
+g_g.savefig(f"{IMG_PATH}/g_g.png", dpi=_dpi)
 
 g_rmax = sns.displot(dsf, x='R_MAX', stat='count', hue='NMASSIF',
                      multiple='stack')
 g_rmax.set_xlabels('rayon de représentativité placette')
 g_rmax.set_ylabels('nb. placettes')
-g_rmax.savefig(f"{img_path}/g_rmax.png", dpi=_dpi)
+g_rmax.savefig(f"{IMG_PATH}/g_rmax.png", dpi=_dpi)
 
 g_dmax20 = sns.displot(dsf, x='DIST_MAX', stat='count', hue='NMASSIF',
                        multiple='stack', bins=list(range(0,60,10)))
 g_dmax20.set_xlabels('distance du 20e arbre')
 g_dmax20.set_ylabels('nb. placettes')
-g_dmax20.savefig(f"{img_path}/g_dmax20.png", dpi=_dpi)
+g_dmax20.savefig(f"{IMG_PATH}/g_dmax20.png", dpi=_dpi)
 
 ### visi houppier  #############################################################
 g_visi = sns.displot(arbres, x='visi', stat='count', hue='NMASSIF',
@@ -346,7 +340,7 @@ g_visi = sns.displot(arbres, x='visi', stat='count', hue='NMASSIF',
 g_visi.set_xlabels('visbilité houppier')
 g_visi.set_ylabels('nb. arbres')
 # g_visi.set_xticklabels(['non visible', 'visible'])
-g_visi.savefig(f"{img_path}/g_visi.png", dpi=_dpi)
+g_visi.savefig(f"{IMG_PATH}/g_visi.png", dpi=_dpi)
 
 
 
@@ -361,7 +355,7 @@ g_mb_mr._legend.set_title('nb.arbres')
 for lh in g_mb_mr._legend.legendHandles:
     lh.set_alpha(.4)
     lh.set_color('orange')
-g_mb_mr.savefig(f"{img_path}/g_mb_mr.png", dpi=_dpi)
+g_mb_mr.savefig(f"{IMG_PATH}/g_mb_mr.png", dpi=_dpi)
 
 
 # carte de répartition des placettes réalisées #################################
@@ -372,9 +366,9 @@ ax = dsf_wm.plot(figsize=(8, 14), alpha=0.9, color='red', markersize=1.8,
                  edgecolor='red')
 # bx = rdf_wm.plot(figsize=(20, 40), alpha=0.5, edgecolor='k')
 # dsf_wm.apply(lambda x: ax.annotate(text=x['NUM_PLAC'], xy=x.geometry.coords[0],
-#                                    xytext=(3, 3), textcoords="offset points", fontsize=7),
-#              axis=1)
+#                                     xytext=(3, 3), textcoords="offset points",
+#                                     fontsize=5), axis=1)
 ax.set_axis_off()
 cx.add_basemap(ax, zoom=11)
-ax.get_figure().savefig(f"{img_path}/g_localisation.png", bbox_inches='tight',
+ax.get_figure().savefig(f"{IMG_PATH}/g_localisation.png", bbox_inches='tight',
                         dpi=_dpi*2.0, orientation='landscape')

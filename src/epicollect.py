@@ -12,17 +12,19 @@ import geopandas as gpd
 import requests
 from io import StringIO
 
+
+PROJECT_SLUG = 'dsf-chataignier-ile-de-france-et-oise'
+MAP_INDEX = 1
+FILTER_BY = 'created_at' #or uploaded_at
+FILTER_FROM = '2022-06-01'
+FORMAT = 'csv'
+
+
 ################################################################################
-def get_epicollect():
-    project_slug = 'dsf-chataignier-ile-de-france-et-oise'
-    map_index = 1
-    filter_by = 'created_at' #or uploaded_at
-    filter_from = '2022-06-01'
-    _format = 'csv'
-    
-    url = f"https://five.epicollect.net/api/export/entries/{project_slug}?"
-    url += f"map_index={map_index}&format={_format}&headers=true"
-    url += f"&filter_by={filter_by}&filter_from={filter_from}"
+def get_epicollect():    
+    url = f"https://five.epicollect.net/api/export/entries/{PROJECT_SLUG}?"
+    url += f"map_index={MAP_INDEX}&format={FORMAT}&headers=true"
+    url += f"&filter_by={FILTER_BY}&filter_from={FILTER_FROM}"
     
     print('loading epicollect')
     download = requests.get(url)
@@ -73,10 +75,10 @@ def get_epicollect():
            'RAYON_PLACETTE', 'DMAXA', 'REMARQUES'
     '''
     
-    ################################################################################
-    
+    ############################################################################    
     df['date'] = df['date'].str.replace('/','-')
-    df['NOTATEUR'] = df.apply(lambda x: f"{x['type_obs_1']}_{x['obs_1']}_{x['obs_onf_1']}".replace('_nan',''),axis=1)
+    df['NOTATEUR'] = df.apply(
+        lambda x: f"{x['type_obs_1']}_{x['obs_1']}_{x['obs_onf_1']}".replace('_nan',''), axis=1)
     df.rename({'arbre_9': 'arbre_09'}, inplace=True, axis=1)
     
     gdf = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.long_coord_gps,
@@ -115,7 +117,10 @@ def get_epicollect():
             gdf.drop(c, axis='columns', inplace=True)
     
     gdf['filename'] = 'epicollect'
+    
     return gdf
 
+
+################################################################################
 if __name__ == "__main__":
     get_epicollect()
