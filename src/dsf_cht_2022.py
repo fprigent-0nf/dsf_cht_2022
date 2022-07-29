@@ -15,8 +15,8 @@ import pandas as pd
 import geopandas as gpd
 from shapely import wkt
 
-import epicollect as epi
-import TB as tb
+import epicollect
+import TB
 
 survey_path = "../data/shp"
 csv_path = "../data/csv"
@@ -49,15 +49,15 @@ def load_all_zipsurveys_as_geopandas(path):
 ################################################################################
 
 dsf0 = load_all_zipsurveys_as_geopandas(survey_path)
-epigdf = epi.gdf
-tbgdf = tb.gdf
+epigdf = epicollect.get_epicollect()
+tbgdf = TB.parse_csv()
 #load csv
 dcsv = pd.read_csv(csv_path + '/dsf_cht_2022_p173_ronqueux_releve.csv',
               delimiter=';')
 dcsv['geometry'] = dcsv.geometry.apply(wkt.loads)
 ddcsv=gpd.GeoDataFrame(dcsv, geometry='geometry', crs=2154)
 
-dsf = pd.concat([dsf0, epi.gdf, dcsv, tb.gdf], axis=0, ignore_index=True)
+dsf = pd.concat([dsf0, epigdf, dcsv, tbgdf], axis=0, ignore_index=True)
 
 l1 = len(dsf)
 dsf.drop_duplicates(subset=dsf.columns[dsf.columns!='filename'],
