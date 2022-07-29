@@ -61,6 +61,7 @@ csv = csv1.copy()
 
 csv['lib_codeinsee'].fillna('dsf', inplace=True)
 # csv.loc[csv.code_placette.dtype != 'int64', 'placette'] = csv.code_placette
+# csv.loc[lambda df: df['placette'].dtype == 'int64', 'placette']
 
 cols = ['code_placette', 'x93', 'y93', 'lib_codeinsee', 'observation', 'date_obs',
         'codeco1', 'G___PLAC', 'DMAXA___PLAC', 'REMARQUES___PLAC',
