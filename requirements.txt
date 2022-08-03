@@ -1,0 +1,7 @@
+pandas
+geopandas
+matplotlib
+numpy
+seaborn
+tqdm
+requests
