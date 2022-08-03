@@ -21,6 +21,7 @@ import TB
 
 SURVEY_PATH = "../data/shp"
 CSV_PATH = "../data/csv"
+CSV_SEP = ";"
 OUT_PATH = "../result"
 RDF_PATH = "C:/Donnees/fp42778/SIG/@ENDO/Referentiel/8520_rdf/rdf_ugs_8520.shp"
 PLACETTES_2022_PATH = "../data/sig/placettes2022.zip"
@@ -242,9 +243,9 @@ repex = {';': ' - ',
 dsf.replace(repex, regex=True, inplace=True)
 epigdf.replace(repex, regex=True, inplace=True)
 file_name = "dsf_cht_2022_final"
-dsf.to_csv(f"{OUT_PATH}/{file_name}.csv", index=False, sep=',', encoding="latin1")
+dsf.to_csv(f"{OUT_PATH}/{file_name}.csv", index=False, sep=CSV_SEP, encoding="latin1")
 dsf.to_file(f"{OUT_PATH}/{file_name}.shp.zip", driver='ESRI Shapefile')
-epigdf.to_csv(f"{OUT_PATH}/dsf_2022_epicollect.csv", index=False, sep=',',
+epigdf.to_csv(f"{OUT_PATH}/dsf_2022_epicollect.csv", index=False, sep=CSV_SEP,
               encoding="latin1")
 
 

@@ -1,7 +1,7 @@
 
 # DSF_CHT 2022
 
-*2022-07-31_1956   fprigent-0NF*
+*2022-08-03_1853   fprigent-0NF*
 
 ### 188 placettes retenues (17 placettes epicollect)
 #### 3760 arbres notés
