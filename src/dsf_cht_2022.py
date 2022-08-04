@@ -7,6 +7,7 @@ Created on Wed Jun 15 11:53:27 2022
 ><(((°>
 """
 
+# %%
 import glob
 import os
 import sys
@@ -229,6 +230,7 @@ ddl['etat_sanit'] = pd.to_numeric(pd.cut(ddl.prop_EF, bins=interv, labels=lab,
 
 dsf = dsf.join(ddl, on=['uuid','NUM_PLAC','NMASSIF'])
 
+
 ### Sauvegardes data.frame FINAL ################################################
 # from datetime import datetime
 # date = datetime.today().strftime('%Y-%m-%d_%H%M')
@@ -242,6 +244,12 @@ repex = {';': ' - ',
          }
 dsf.replace(repex, regex=True, inplace=True)
 epigdf.replace(repex, regex=True, inplace=True)
+
+dsf['X_L93'] = dsf.geometry.x
+dsf['Y_L93'] = dsf.geometry.y
+epigdf['X_L93'] = epigdf.geometry.x
+epigdf['Y_L93'] = epigdf.geometry.y
+
 file_name = "dsf_cht_2022_final"
 dsf.to_csv(f"{OUT_PATH}/{file_name}.csv", index=False, sep=CSV_SEP, encoding="latin1")
 dsf.to_file(f"{OUT_PATH}/{file_name}.shp.zip", driver='ESRI Shapefile')
@@ -258,7 +266,7 @@ nb_arbres_par_classes = ddl[list('ABCDEF')].sum()
 nb_arbres_par_classes.columns = ['classe','nb.arbres']
 
 
-################################################################################
+# %%############################################################################
 ### PLOTS ######################################################################
 ################################################################################
 import seaborn as sns
