@@ -13,30 +13,32 @@ import requests
 from io import StringIO
 
 
-PROJECT_SLUG = 'dsf-chataignier-ile-de-france-et-oise'
+PROJECT_SLUG = "dsf-chataignier-ile-de-france-et-oise"
 MAP_INDEX = 1
-FILTER_BY = 'created_at' #or uploaded_at
-FILTER_FROM = '2022-06-01'
-FORMAT = 'csv'
+FILTER_BY = "created_at"  # or uploaded_at
+FILTER_FROM = "2022-06-01"
+FORMAT = "csv"
 
 
 ################################################################################
-def get_epicollect():    
+def get_epicollect():
     url = f"https://five.epicollect.net/api/export/entries/{PROJECT_SLUG}?"
     url += f"map_index={MAP_INDEX}&format={FORMAT}&headers=true"
     url += f"&filter_by={FILTER_BY}&filter_from={FILTER_FROM}"
-    
-    print('loading epicollect')
+
+    print("loading epicollect")
     download = requests.get(url)
-    text=StringIO(download.content.decode('utf-8'))
+    text = StringIO(download.content.decode("utf-8"))
     df = pd.read_csv(text)
-    
+
     # placette Nan df.ec5_uuid=="1332a1fd-a583-48a0-94e9-ec30aea79b7b"
-    df.loc[df.ec5_uuid=="1332a1fd-a583-48a0-94e9-ec30aea79b7b",'arbre_01':'MR_20'] = 5
-    
+    df.loc[
+        df.ec5_uuid == "1332a1fd-a583-48a0-94e9-ec30aea79b7b", "arbre_01":"MR_20"
+    ] = 5
+
     print(f"    {len(df)} placettes")
-    
-    ''' géorelevé: dsf_cht_2022
+
+    """ géorelevé: dsf_cht_2022
     
            'uuid', 'ObjetId', 'Descriptif', 'DATE', 'NOTATEUR', 'NMASSIF',
            'NUM_PLAC', 'ETAT_SAN', 'G', 'REC_SUP2', 'REC_LIGN', 'DIST_MAX',
@@ -73,51 +75,64 @@ def get_epicollect():
            'arbre_17', 'MB_17', 'MR_17', 'arbre_18', 'MB_18', 'MR_18',
            'arbre_19', 'MB_19', 'MR_19', 'arbre_20', 'MB_20', 'MR_20',
            'RAYON_PLACETTE', 'DMAXA', 'REMARQUES'
-    '''
-    
-    ############################################################################    
-    df['date'] = df['date'].str.replace('/','-')
-    df['NOTATEUR'] = df.apply(
-        lambda x: f"{x['type_obs_1']}_{x['obs_1']}_{x['obs_onf_1']}".replace('_nan',''), axis=1)
-    df.rename({'arbre_9': 'arbre_09'}, inplace=True, axis=1)
-    
-    gdf = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.long_coord_gps,
-                                                           df.lat_coord_gps,
-                                                           crs='epsg:4326'))
+    """
+
+    ############################################################################
+    df["date"] = df["date"].str.replace("/", "-")
+    df["NOTATEUR"] = df.apply(
+        lambda x: f"{x['type_obs_1']}_{x['obs_1']}_{x['obs_onf_1']}".replace(
+            "_nan", ""
+        ),
+        axis=1,
+    )
+    df.rename({"arbre_9": "arbre_09"}, inplace=True, axis=1)
+
+    gdf = gpd.GeoDataFrame(
+        df,
+        geometry=gpd.points_from_xy(
+            df.long_coord_gps, df.lat_coord_gps, crs="epsg:4326"
+        ),
+    )
     gdf.to_crs(epsg=2154, inplace=True)
-    gdf.rename(columns = {'ec5_uuid':'uuid',
-                         'date':'DATE',
-                         'RECOUV_SUP': 'REC_SUP2',
-                         'RECOUV_INF': 'REC_LIGN',
-                         'RAYON_PLACETTE': 'R_MAX',
-                         'DMAXA': 'DIST_MAX',
-                         'REMARQUES': 'REMARQUE'
-                         }, inplace = True)
-    gdf.columns = gdf.columns.str.replace('MB_','MORTAL').str.replace('MR_','MRAMIF')
-    
-    cols = ['created_at',
-            'uploaded_at',
-            '2_Coupes_effectues_d',
-            'title',
-            'type_obs_1',
-            'obs_1',
-            'obs_onf_1',
-            'lat_coord_gps',
-            'long_coord_gps',
-            'accuracy_coord_gps',
-            'UTM_Northing_coord_gps',
-            'UTM_Easting_coord_gps',
-            'UTM_Zone_coord_gps',
-            'PEUP_RUIN',
-            '14_Visibilit_des_hou']
-    gdf.drop(cols, axis='columns', inplace=True)
-    
+    gdf.rename(
+        columns={
+            "ec5_uuid": "uuid",
+            "date": "DATE",
+            "RECOUV_SUP": "REC_SUP2",
+            "RECOUV_INF": "REC_LIGN",
+            "RAYON_PLACETTE": "R_MAX",
+            "DMAXA": "DIST_MAX",
+            "REMARQUES": "REMARQUE",
+        },
+        inplace=True,
+    )
+    gdf.columns = gdf.columns.str.replace("MB_", "MORTAL").str.replace("MR_", "MRAMIF")
+
+    cols = [
+        "created_at",
+        "uploaded_at",
+        "2_Coupes_effectues_d",
+        "title",
+        "type_obs_1",
+        "obs_1",
+        "obs_onf_1",
+        "lat_coord_gps",
+        "long_coord_gps",
+        "accuracy_coord_gps",
+        "UTM_Northing_coord_gps",
+        "UTM_Easting_coord_gps",
+        "UTM_Zone_coord_gps",
+        "PEUP_RUIN",
+        "14_Visibilit_des_hou",
+    ]
+    gdf.drop(cols, axis="columns", inplace=True)
+
     for c in gdf.columns:
-        if 'arbre_' in c:
-            gdf.drop(c, axis='columns', inplace=True)
-    
-    gdf['filename'] = 'epicollect'
-    
+        if "arbre_" in c:
+            gdf.drop(c, axis="columns", inplace=True)
+
+    gdf["filename"] = "epicollect"
+
     return gdf
 
 

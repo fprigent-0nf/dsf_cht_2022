@@ -12,11 +12,11 @@ import markdown
 from datetime import datetime
 
 
-date = datetime.today().strftime('%Y-%m-%d_%H%M')
-table1 = d.ddl.reset_index().iloc[:,1:].to_markdown(index=False)
+date = datetime.today().strftime("%Y-%m-%d_%H%M")
+table1 = d.ddl.reset_index().iloc[:, 1:].to_markdown(index=False)
 
 
-HEAD = '''
+HEAD = """
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -50,13 +50,13 @@ HEAD = '''
 </head>
 
 <body>
-'''
+"""
 TAIL = """
 </body>
 </html>
 """
 
-md_text = f'''
+md_text = f"""
 # DSF_CHT 2022
 
 *{date}   fprigent-0NF*
@@ -117,16 +117,16 @@ md_text = f'''
 
 ## Nombre de placettes par massifs
 {d.nb_plac_par_massif.to_markdown(index=False)}
-'''
+"""
 
 ################################################################################
-html = HEAD + markdown.markdown(md_text, extensions=['tables']) + TAIL
+html = HEAD + markdown.markdown(md_text, extensions=["tables"]) + TAIL
 
 report_html = "../report/dsf_cht2022_report.html"
 report_md = "../report/README.md"
-with open(report_html, "w", encoding="utf-8",
-          errors="xmlcharrefreplace") as output_file:
+with open(
+    report_html, "w", encoding="utf-8", errors="xmlcharrefreplace"
+) as output_file:
     output_file.write(html)
-with open(report_md, "w", encoding="utf-8",
-          errors="xmlcharrefreplace") as output_file:
+with open(report_md, "w", encoding="utf-8", errors="xmlcharrefreplace") as output_file:
     output_file.write(md_text)
